@@ -10,3 +10,17 @@ body {
 .page-container {
     margin-top: 75px;
 }
+
+#roseLogo{
+    max-width: 350px;
+    margin: auto;
+    display: block;
+}
+#loginBtn{
+    background-color: #800000;
+    color:white;
+    display:block;
+    margin: 60px auto;
+    padding: 10x 30px;
+    font-size: 1.1em;
+}

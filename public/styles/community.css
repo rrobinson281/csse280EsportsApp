@@ -1,0 +1,21 @@
+.btn{
+    background-color: #800000;
+    color:white;
+    display:block;
+    margin: 0px auto 20px;
+    font-size: large;
+    padding: 10px 50px;
+}
+.listDiv{
+    background-color: green;
+    width: 90vw;
+}
+img{
+    display: inline;
+    height: 50px;
+    width: 50px;
+    margin-right: 10px;
+}
+p{
+    padding: 10px 10px 0px 10px;
+}

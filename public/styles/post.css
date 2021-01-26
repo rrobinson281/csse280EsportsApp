@@ -1,0 +1,16 @@
+.btn{
+    background-color: #800000;
+    color:white;
+    display:block;
+    margin: 0px auto 20px;
+    font-size: large;
+    padding: 10px 50px;
+}
+
+h2{
+    text-align: center;
+}
+.input-div{
+    border-width: 2px;
+    border-color: black;
+}
