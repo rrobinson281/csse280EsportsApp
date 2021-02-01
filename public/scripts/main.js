@@ -25,7 +25,7 @@ rhit.AuthManager = class {
 	 }
  	signIn() {
 		console.log("sign in with rosefire");
-		Rosefire.signIn(`c7f695c7-5b13-4a4d-addd-76202bb2cb37`, (err, rfUser) => {
+		Rosefire.signIn(`87add928-44b8-473d-ae44-8abf90427ae6`, (err, rfUser) => {
 			if (err) {
 			  console.log("Rosefire error!", err);
 			  return;
@@ -66,6 +66,10 @@ rhit.initPage = function(){
 		document.querySelector("#infoBtn").onclick = () => window.location.href="/info.html";
 		document.querySelector("#profileBtn").onclick = () => window.location.href="/profile.html";
 	}
+	if(document.querySelector("#loginPage")){
+		console.log("You are on login page.");
+		new rhit.LoginPageController();
+	}
 	if(document.querySelector("#homePage")){
 
 	}
@@ -89,13 +93,14 @@ rhit.initPage = function(){
 
 rhit.main = function () {
 	console.log("Ready");
-	rhit.initPage();
-	// rhit.loginManager = new rhit.AuthManager();
-	// rhit.loginManager.beginListening(() => {
-	// 	console.log("auth change callback fired. TODO check for redirects and init the page");
-	// 	rhit.checkForRedirects();
-	// 	rhit.initPage();
-	// });
+	
+	//rhit.initPage();
+	rhit.loginManager = new rhit.AuthManager();
+	rhit.loginManager.beginListening(() => {
+		console.log("auth change callback fired. TODO check for redirects and init the page");
+		rhit.checkForRedirects();
+		rhit.initPage();
+	});
 };
 
 rhit.main();
