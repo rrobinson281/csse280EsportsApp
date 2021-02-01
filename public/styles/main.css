@@ -24,3 +24,7 @@ body {
     padding: 10x 30px;
     font-size: 1.1em;
 }
+#bottomNav{
+    background-color: #800000;
+    color: white;
+}
