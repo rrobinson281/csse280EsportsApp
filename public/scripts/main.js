@@ -66,6 +66,24 @@ rhit.initPage = function(){
 		document.querySelector("#infoBtn").onclick = () => window.location.href="/info.html";
 		document.querySelector("#profileBtn").onclick = () => window.location.href="/profile.html";
 	}
+	if(document.querySelector("#homePage")){
+
+	}
+	if(document.querySelector("#reccomendationPage")){
+
+	}
+	if(document.querySelector("#communityPage")){
+
+	}
+	if(document.querySelector("#communityPostPage"))[
+		
+	]
+	if(document.querySelector("#infoPage")){
+
+	}
+	if(document.querySelector("#profilePage")){
+
+	}
 	
 }
 
