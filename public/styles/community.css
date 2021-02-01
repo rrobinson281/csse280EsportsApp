@@ -1,10 +1,14 @@
-.btn{
+.cmtBtn{
     background-color: #800000;
     color:white;
     display:block;
-    margin: 0px auto 20px;
+    margin: 0px auto 50px;
     font-size: large;
     padding: 10px 50px;
+}
+.btn{
+    background-color: #800000;
+    color:white;
 }
 .listDiv{
     background-color: green;
