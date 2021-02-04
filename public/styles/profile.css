@@ -14,9 +14,10 @@
 
 #accountDiv{
     border-color: black;
-    border-width: medium;
-    background: lightgray;
+    border-style: solid;
+    border-width: 10px;
+    background: rgb(151, 148, 148);
     margin: auto;
-    width: 100px;
-    height: 100px;
+    width: 350px;
+    height: 350px;
 }
