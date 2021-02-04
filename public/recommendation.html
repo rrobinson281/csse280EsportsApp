@@ -7,21 +7,21 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons">
   <link rel="stylesheet" href="styles/bootstrap-material-design.min.css">
   <link rel="stylesheet" href="styles/main.css">
-  <link rel="stylesheet" href="styles/post.css">
-  <title>Esports Center App</title>
+  <link rel="stylesheet" href="styles/homePage.css">
+  <title>Esports Center</title>
 </head>
 
 <body>
   <nav class="navbar navbar-dark fixed-top">
-    <a class="navbar-brand" href="/community.html">Community Page</a>
+    <a class="navbar-brand" href="/">Esports Center App</a>
   </nav>
-  <div id="postPage" class="container page-container justify-content-center">
-    <h2>Write Your Post!</h2>
-    <div class ="input-div"><textarea class="form-control" id="postInput" rows="5"></textarea></div>
-
-    
+  <div id="recommendationPage" class="container page-container justify-content-center">
+    <div class = "justify-content-center"><h2>Recommend a game!</h2></div>
+    <label for="recommendGame" class="bmd-label-floating">Game</label>
+    <input type="text" class="form-control" id="recommendGame">
+    <div class ="input-div"><textarea class="form-control" id="recInput" rows="5"></textarea></div>
+    <div id ="btnCont" class = "justify-content-center"><button type = "button" class = 'btn  mx-auto' id="recBtn">Send Recommendation</button></div>
   </div>
-  <div class="fixed-bottom"><button type = "button" class="btn" id = "postBtn">Submit Post!</button></div>
   <script src="scripts/jquery.min.js"></script>
   <script src="scripts/popper.js"></script>
   <script src="scripts/bootstrap-material-design.js"></script>
@@ -30,11 +30,7 @@
   <script src="/__/firebase/7.18.0/firebase-analytics.js"></script>
   <script src="/__/firebase/7.18.0/firebase-auth.js"></script>
   <script src="/__/firebase/7.18.0/firebase-firestore.js"></script>
-  <script src="scripts/rosefire.min.js"></script>
   <script src="/__/firebase/init.js"></script>
-
-
-  <!-- <script src=" /__/firebase/init.js?useEmulator=true"></script> -->
   <script src="scripts/main.js"></script>
 </body>
 
