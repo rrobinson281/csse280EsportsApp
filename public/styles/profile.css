@@ -8,6 +8,17 @@
     border-radius: 50%;
 }
 
+#twitterIcon, #discordIcon, #xboxIcon, #switchIcon, #playstationIcon{
+    border-radius: 50%;
+    width: 38px;
+    height: 38px;
+}
+#steamIcon{
+    border-radius: 50%;
+    width: 60px;
+    height: 38px; 
+}
+
 #userName{
     text-align: center;
 }
