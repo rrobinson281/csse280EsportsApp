@@ -156,9 +156,14 @@ rhit.ProfileManager = class{
 			func();
 		});
 		this._profileRef.onSnapshot(docs =>{
-			this._profileList = docs;
+			this._profileList = docs.docs;
+			console.log(this._profileList[0].get(rhit.PROFILE_TYPE));
 		});
-		
+	}
+	editProfilePhoto(url){
+		this._ref.update({
+			[rhit.PROFILE_PHOTO]: url
+		})
 	}
 	addProfile(profileType, profileName){
 		this._profileRef.add({
@@ -303,7 +308,7 @@ rhit.initPage = function(){
 	}
 	if(document.querySelector("#profilePage")){
 		console.log("You are on the profilePage");
-		new rhit.ProfilePageController();
+		rhit.profileController = new rhit.ProfilePageController();
 	}
 	
 }
