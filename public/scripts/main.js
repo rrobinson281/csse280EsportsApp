@@ -7,6 +7,11 @@ rhit.RECOMMENDATION_GAME="Game";
 rhit.POSTS = "Posts";
 rhit.POST_TEXT="PostText";
 rhit.LAST_TOUCHED = "lastTouched";
+rhit.PROFILE = "Profile";
+rhit.PROFILE_PHOTO = "ProfilePhoto";
+rhit.USER_PROFILES = "UserProfiles"
+rhit.PROFILE_NAME = "ProfileName";
+rhit.PROFILE_TYPE= "ProfileType";
 function htmlmToElement(html){
 	var template = document.createElement('template');
 	html = html.trim();
@@ -28,9 +33,11 @@ rhit.RecommendationManager = class{
 			[rhit.RECOMMENDATION_TEXT]: recommendationText,
 		}).then(function(docRef){
 			console.log("Document written with ID: ",docRef.id);
+			window.location.href="/homePage.html"
 		})
 		.catch(function(error){
 			console.error("Error adding document: ",error);
+			window.location.href="/homePage.html"
 		});
 	}
 }
@@ -45,6 +52,11 @@ rhit.CommunityPageController = class{
 		for(let i = 0; i < rhit.communityManager.length;i++){
 			const post = rhit.communityManager.getPostAtIndex(i);
 			const newPost = this._createPost(post);
+			newPost.onclick = () =>{
+				console.log("You clicked on a post");
+				if(post.UserId == rhit.loginManager.uid){}
+				else{window.location.href=`/profile.html?id=${post.UserId}`}
+			};
 			newList.append(newPost);
 		}
 		const oldList = document.querySelector("#communityList");
@@ -68,7 +80,7 @@ rhit.CommunityManager = class{
 	}
 	beginListening(func){
 		// let query = this._ref.orderBy(rhit.LAST_TOUCHED,"desc").limit(50);
-		let query = this._ref.limit(50);
+		let query = this._ref.orderBy(rhit.LAST_TOUCHED,"desc").limit(50);
 		this.unsubscribe = query.onSnapshot((querySnapshot) => {
 			this._documentSnapshots = querySnapshot.docs;
 			func();
@@ -98,10 +110,100 @@ rhit.PostManager = class{
 			[rhit.LAST_TOUCHED]: firebase.firestore.Timestamp.now(),
 		}).then(function(docRef){
 			console.log("Document written with ID: ",docRef.id);
+			window.location.href = "/community.html";
 		})
 		.catch(function(error){
 			console.error("Error adding document: ",error);
 		});
+	}
+}
+rhit.ProfilePageController = class{
+	constructor(){
+		const queryString = window.location.search;
+		const urlParams = new URLSearchParams(queryString);
+		this._uid = urlParams.get("id");
+		this.profileManager = new rhit.ProfileManager(this._uid);
+		this.profileManager.beginListening(this.updateView.bind(this));
+		
+	}
+	updateView(){
+		document.querySelector("#userName").innerHTML = this._uid;
+		document.querySelector("#profilePic").src = this.profileManager.profilePhoto;
+	}
+}
+rhit.ProfileManager = class{
+	constructor(uid){
+		this._documentSnapshot =[];
+		this._profileList;
+		this._uid = uid
+		// this._ref = firebase.firestore().collection(rhit.PROFILE).doc(this._uid);
+		this._ref = firebase.firestore().collection(rhit.PROFILE).doc(this._uid);
+		this._profileRef = this._ref.collection(rhit.USER_PROFILES);
+		this._ref.get().then((doc)=>{
+			if(!doc.exists){
+				firebase.firestore().collection(rhit.PROFILE).doc(this._uid).set({
+					[rhit.PROFILE_PHOTO]: "https://t4.ftcdn.net/jpg/00/64/67/63/360_F_64676383_LdbmhiNM6Ypzb3FM4PPuFP9rHe7ri8Ju.jpg",
+					[rhit.USER_PROFILES]: {}
+				})
+
+			}
+		});
+	}
+	beginListening(func){
+		this.unsubscribe = this._ref.onSnapshot((querySnapshot) => {
+			this._documentSnapshot = querySnapshot;
+			console.log(querySnapshot.get(rhit.PROFILE_PHOTO))
+			func();
+		});
+		this._profileRef.onSnapshot(docs =>{
+			this._profileList = docs;
+		});
+		
+	}
+	addProfile(profileType, profileName){
+		this._profileRef.add({
+			[rhit.PROFILE_TYPE]: profileType,
+			[rhit.PROFILE_NAME]: profileName,
+		}).then(function(docRef){
+			console.log("Document written with ID: ",docRef.id);
+		})
+		.catch(function(error){
+			console.error("Error adding document: ",error);
+		});
+	}
+	editProfile(profileID, profileType, profileName){
+		this._profileRef.doc(profileID).update({
+			[rhit.PROFILE_TYPE]: profileType,
+			[rhit.PROFILE_NAME]: profileName,
+		}).then(()=>{
+			console.log("successful Update!");
+		})
+		.catch((error)=>{
+			console.error("UpdateFailed: ",error);
+		});
+	}
+	removeProfile(profileID){
+		this._profileRef.doc(profileID).delete().then(()=>{
+			console.log("Document successfully deleted!");
+			window.location.href = "/index.html";
+		}).catch((error)=> {
+			console.error("Error removing document: ", error);
+		});
+	}
+	get profilePhoto(){
+		return this._documentSnapshot.get(rhit.PROFILE_PHOTO);
+	}
+	getProfileAtIndex(index){
+		return new rhit.Profile(this._profileList[index].get(rhit.PROFILE_TYPE),
+								this._profileList[index].get(rhit.PROFILE_NAME),
+								this._profileList[index].id);
+	}
+}
+rhit.Profile = class{
+	constructor(type,name,id){
+		this.type = type;
+		this.name = name;
+		this.id = id;
 	}
 }
 rhit.LoginPageController = class {
@@ -148,6 +250,7 @@ rhit.AuthManager = class {
 	get isSignedIn() {return !!this._user;}
 	get uid() { return this._user.uid} 
 }
+
 rhit.checkForRedirects = function(){
 	if(document.querySelector("#loginPage") && rhit.loginManager.isSignedIn){
 		window.location.href = "/homePage.html";
@@ -162,7 +265,7 @@ rhit.initPage = function(){
 		document.querySelector("#homeBtn").onclick = () => window.location.href="/homePage.html";
 		document.querySelector("#communityBtn").onclick = () => window.location.href="/community.html";
 		document.querySelector("#infoBtn").onclick = () => window.location.href="/info.html";
-		document.querySelector("#profileBtn").onclick = () => window.location.href="/profile.html";
+		document.querySelector("#profileBtn").onclick = () => window.location.href=`/profile.html?id=${rhit.loginManager.uid}`;
 	}
 	if(document.querySelector("#loginPage")){
 		console.log("You are on login page.");
@@ -180,7 +283,6 @@ rhit.initPage = function(){
 			let gameName = document.querySelector("#recommendGame").value;
 			let recText = document.querySelector("#recInput").value;
 			rhit.recommendationManager.sendRecommendation(gameName, recText);
-			window.location.href="/homePage.html"
 		};
 	}
 	if(document.querySelector("#communityPage")){
@@ -193,7 +295,6 @@ rhit.initPage = function(){
 		document.querySelector("#postBtn").onclick = ()  =>{
 			let postText = document.querySelector("#postInput").value;
 			rhit.postManager.addPost(postText);
-			// window.location.href = "/community.html";
 		}
 	}
 	
@@ -201,7 +302,8 @@ rhit.initPage = function(){
 
 	}
 	if(document.querySelector("#profilePage")){
-
+		console.log("You are on the profilePage");
+		new rhit.ProfilePageController();
 	}
 	
 }
