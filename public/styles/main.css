@@ -11,6 +11,10 @@ body {
     margin-top: 75px;
 }
 
+.btn{
+    color: white;
+}
+
 #roseLogo{
     max-width: 350px;
     margin: auto;
