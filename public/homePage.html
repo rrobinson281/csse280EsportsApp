@@ -10,13 +10,9 @@
   <link rel="stylesheet" href="styles/homePage.css">
   <link href='fullcalendar/main.css' rel='stylesheet' />
   <script src='fullcalendar/main.js'></script>
+  <script src="https://apis.google.com/js/api.js"></script>
   <title>Esports Center</title>
 </head>
-<script>
-
-
-
-</script>
 <body>
   <nav class="navbar navbar-dark fixed-top">
     <a class="navbar-brand" href="#">Esports Center App</a>
@@ -29,6 +25,8 @@
           src="https://www.free-printable-calendar.com/2021-printable-calendar-image/february-2021-calendar.jpg"
           alt="Calendar">
     </div> -->
+    <button id="authorize_button" style="display: none;">Authorize</button>
+    <button id="signout_button" style="display: none;">Sign Out</button>
     <div id="calendar"></div>
     <div class = "container justify-content-center" id= "btn-container">
       <div class="row"><button id="scheduleVisitBtn" type= "button" class= "btn mx-auto" >Schedule Visit</button></div>
@@ -63,6 +61,11 @@
   <script src="/__/firebase/7.18.0/firebase-firestore.js"></script>
   <script src="/__/firebase/init.js"></script>
   <script src="scripts/main.js"></script>
+  <script async defer src="https://apis.google.com/js/api.js"
+      onload="this.onload=function(){};handleClientLoad()"
+      onreadystatechange="if (this.readyState === 'complete') this.onload()">
+    </script>
+
 </body>
 
 </html>
