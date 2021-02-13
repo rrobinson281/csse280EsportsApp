@@ -8,22 +8,34 @@
   <link rel="stylesheet" href="styles/bootstrap-material-design.min.css">
   <link rel="stylesheet" href="styles/main.css">
   <link rel="stylesheet" href="styles/homePage.css">
+  <link href='fullcalendar/main.css' rel='stylesheet' />
+  <script src='fullcalendar/main.js'></script>
   <title>Esports Center</title>
 </head>
+<script>
 
+  document.addEventListener('DOMContentLoaded', function() {
+    var calendarEl = document.getElementById('calendar');
+    var calendar = new FullCalendar.Calendar(calendarEl, {
+      initialView: 'dayGridMonth'
+    });
+    calendar.render();
+  });
+
+</script>
 <body>
   <nav class="navbar navbar-dark fixed-top">
     <a class="navbar-brand" href="#">Esports Center App</a>
   </nav>
   <div id="homePage" class="container page-container justify-content-center">
     <h1 id="userNameText">Welcome, Gamer!</h1>
-    <div id="calendar">Placeholder Calendar</div>
+    <!-- <div id="calendar">Placeholder Calendar</div>
     <div>
       <img id="placeholderCalendar"
           src="https://www.free-printable-calendar.com/2021-printable-calendar-image/february-2021-calendar.jpg"
           alt="Calendar">
-    </div>
-
+    </div> -->
+    <div id="calendar"></div>
     <div class = "container justify-content-center" id= "btn-container">
       <div class="row"><button id="scheduleVisitBtn" type= "button" class= "btn mx-auto" >Schedule Visit</button></div>
       <div class="row"><button id="recommendGameBtn" type= "button" class= "btn mx-auto" >Recommend a game!</button></div>

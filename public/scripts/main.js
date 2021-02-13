@@ -366,6 +366,13 @@ rhit.initPage = function(){
 		document.querySelector("#userNameText").innerHTML = `Welcome, ${rhit.loginManager.uid}!`;
 		document.querySelector("#scheduleVisitBtn").onclick = () => window.location = "https://ems.rose-hulman.edu/emswebapp/";
 		document.querySelector("#recommendGameBtn").onclick = () => window.location.href = "/recommendation.html";
+		document.addEventListener('DOMContentLoaded', function() {
+			var calendarEl = document.getElementById('calendar');
+			var calendar = new FullCalendar.Calendar(calendarEl, {
+			  initialView: 'dayGridMonth'
+			});
+			calendar.render();
+		  });
 	}
 	if(document.querySelector("#recommendationPage")){
 		console.log("You are on the recommendationPage");
