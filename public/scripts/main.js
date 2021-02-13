@@ -350,6 +350,12 @@ rhit.checkForRedirects = function(){
 		window.location.href="/";
 	}
 }
+
+rhit.ApiManager = class{
+	constructor(){
+
+	}
+}
 rhit.initPage = function(){
 	const urlParams = new URLSearchParams(window.location.search);
 	if(document.querySelector("#bottomNav")){
@@ -376,6 +382,29 @@ rhit.initPage = function(){
 		  });
 		console.log("rendering Calendar");
 		rhit.calendar.render();
+		document.querySelector("#addEventDialog").addEventListener("click", (event) => {
+			const title = document.querySelector("#inputTitle").value;
+			const location = document.querySelector("#inputLocation").value;
+			const description = document.querySelector("#inputDescription").value;
+			const start = document.querySelector("#inputStartTime").value;
+			const end = document.querySelector("#inputEndTime").value;
+			console.log(title, location, description, start, end);
+			// rhit.fbMovieQuotesManager.add(quote, movie);
+
+		});
+
+		$('#addEventDialog').on('show.bs.modal', (event) =>{
+			//pre animation
+			const title = document.querySelector("#inputTitle").value = "";
+			const location = document.querySelector("#inputLocation").value = "";
+			const description = document.querySelector("#inputDescription").value = "";
+			const start = document.querySelector("#inputStartTime").value = "";
+			const end = document.querySelector("#inputEndTime").value = "";
+		});
+		$('#addEventDialog').on('shown.bs.modal', (event) =>{
+			//post animation
+			document.querySelector("#inputTitle").focus();
+		});
 		
 	}
 	if(document.querySelector("#recommendationPage")){

@@ -25,8 +25,15 @@
           src="https://www.free-printable-calendar.com/2021-printable-calendar-image/february-2021-calendar.jpg"
           alt="Calendar">
     </div> -->
-    <button id="authorize_button" style="display: none;">Authorize</button>
-    <button id="signout_button" style="display: none;">Sign Out</button>
+    <br>
+    <br>
+    <div class = "container" id="auth-buttons">
+      <div class="row">
+        <div class = "col"><button type = 'button' class = 'btn'id="authorize_button" style="display: none;">Authorize</button>
+        <button type = 'button' class = 'btn' id="signout_button" style="display: none;">Sign Out</button></div>
+        <div class = "col"></div><button id="addevent_button" type="button" class="btn float-end" data-toggle="modal" data-target="#addEventDialog">Add Event</button></div>
+      </div>
+    </div>
     <div id="calendar"></div>
     <div class = "container justify-content-center" id= "btn-container">
       <div class="row"><button id="scheduleVisitBtn" type= "button" class= "btn mx-auto" >Schedule Visit</button></div>
@@ -51,6 +58,55 @@
       </div>
     </div>
   </div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="addEventDialog" tabindex="-1" role="dialog" aria-labelledby="Add event dialog" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Add Your Event</h5>
+      </div>
+      <div class="modal-body">
+        
+
+        
+          <div class="form-group bmd-form-group">
+            <label for="inputTitle" class="bmd-label-floating">Event Title</label>
+            <input type="text" class="form-control" id="inputTitle">
+          </div>
+          <div class="form-group bmd-form-group"> <!-- manually specified --> 
+            <label for="inputLocation" class="bmd-label-floating">Location</label>
+            <input type="text" class="form-control" id="inputLocation">
+          </div>
+          <div class="form-group bmd-form-group">
+            <label for="inputDescription" class="bmd-label-floating">Description</label>
+            <input type="text" class="form-control" id="inputDescription">
+            <span class="bmd-help">Please write a short description of the event</span>
+          </div>
+          <div class="form-group bmd-form-group">
+            <label for="inputStartTime" class="bmd-label-floating">Start Time</label>
+            <input type="text" class="form-control" id="inputStartTime">
+            <span class="bmd-help">Format e.g. (YYYY-MM-DD)</span>
+          </div>
+          <div class="form-group bmd-form-group">
+            <label for="inputEndTime" class="bmd-label-floating">End Time</label>
+            <input type="text" class="form-control" id="inputEndTime">
+            <span class="bmd-help">Format e.g. (YYYY-MM-DD)</span>
+          </div>
+        
+
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">CANCEL</button>
+        <button id="submitAddQuote" type="button" class="btn btn-primary" data-dismiss="modal">CREATE</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
   <script src="scripts/jquery.min.js"></script>
   <script src="scripts/popper.js"></script>
   <script src="scripts/bootstrap-material-design.js"></script>

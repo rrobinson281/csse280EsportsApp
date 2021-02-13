@@ -23,7 +23,7 @@ body {
     text-align: center;
 }
 
-#scheduleVisitBtn, #recommendGameBtn{
+#scheduleVisitBtn, #recommendGameBtn, .btn{
     background-color: #800000;
     color: white;
 }
@@ -35,5 +35,10 @@ body {
   margin-bottom: 20px;
   width: 300px;
   height: 300px;
+}
+
+#addevent_button{
+    background-color: #800000;
+    color: white;
 }
 
