@@ -16,10 +16,17 @@
     <a class="navbar-brand" href="/homePage.html">Profile Page</a>
   </nav>
   <div id="profilePage" class="container page-container">
-    <div>
-        <img id="profilePic"
-            src="https://i.ytimg.com/vi/yUtIX_C7g68/maxresdefault.jpg"
-            alt="profile_img">
+    <div class = content-align-center>
+      <img id="profilePic"
+          src="https://i.ytimg.com/vi/yUtIX_C7g68/maxresdefault.jpg"
+          alt="profile_img">
+          <div class="dropdown pull-xs-right" id = "editBtn">
+            <button class="btn bmd-btn-icon dropdown-toggle" type="button" id="lr1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <i class="material-icons">more_vert</i>
+            </button>
+            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="lr1">
+              <button class="dropdown-item" type="button" data-toggle="modal" data-target="#editProfileDialog" id="menuEdit"><i class="material-icons">edit</i>&nbsp;&nbsp;&nbsp;Edit Profile Photo</button>
+          </div>
     </div>
     <div id="userName">BlevinsR1</div>
     <br>
@@ -27,46 +34,45 @@
     <br>
     <div id="accountDiv" class="justify-content-center">
         <div>&nbsp;User Accounts:</div>
+        <br>
         <div id="accountDivBody">
           <div class="container">
-            <div class="row">
-              <div class="col">
+            <div class="row" id ="profileRow">
+              <div class="col-6">
                 <img id="twitterIcon"
-            src="https://logodownload.org/wp-content/uploads/2014/09/twitter-logo-1-1.png"
-            alt="twitter_img">&nbsp;Twitter
+                  src="img/twitter.png"
+                  alt="twitter_img">&nbsp;Twitter
               </div>
-              <div class="col">
+              <br><br>
+              <div class="col-6">
                 <img id="steamIcon"
                 src="https://cdn.freebiesupply.com/images/large/2x/steam-logo-black-transparent.png"
                 alt="steam_img">&nbsp;Steam
               </div>
-            </div>
-            <br>
-            <div class="row">
-              <div class="col">
+            <br><br>
+              <div class="col-6">
                 <img id="discordIcon"
                 src="https://cdn0.iconfinder.com/data/icons/free-social-media-set/24/discord-512.png"
                 alt="discord_img">&nbsp;Discord
               </div>
-              <div class="col">
+              <br><br>
+              <div class="col-6">
                 <img id="xboxIcon"
                 src="https://i.pinimg.com/originals/79/b7/f3/79b7f3874d027f46d12c89d6051422c2.png"
                 alt="xbox_img">&nbsp;Xbox
               </div>
-            </div>
-            <br>
-            <div class="row">
-              <div class="col">
+            <br><br>
+              <div class="col-6">
                 <img id="playstationIcon"
                 src="https://www.freepnglogos.com/uploads/playstation-png-logo/navy-playstation-png-logo-5.png"
                 alt="playstation_img">&nbsp;Playstation
               </div>
-              <div class="col">
+              <div class="col-6">
                 <img id="switchIcon"
                 src="https://cdn.mos.cms.futurecdn.net/AfGovVvoB7pdbJcxGwnAPY.jpg"
                 alt="switch_img">&nbsp;Switch
               </div>
-            </div>
+              <br>
           </div>
         </div>
     </div>
@@ -88,6 +94,25 @@
       </div>
       <div class ="col">
         <button type = "button" class = "btn btn-block" id="profileBtn">Profile</button>
+      </div>
+    </div>
+  </div>
+  <div class="modal fade" id="editProfileDialog" tabindex="-1" role="dialog" aria-labelledby="add Quote Dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Edit Profile Photo</h5>
+        </div>
+        <div class="modal-body">
+            <div class="form-group bmd-form-group">
+              <label for="inputQuote">Profile URL</label>
+              <input type="text" class="form-control" id="inputURL" placeholder="URL">
+            </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">CANCEL</button>
+          <button type="button" id = "submitEditURL" data-dismiss="modal" class="btn btn-primary">UPDATE</button>
+        </div>
       </div>
     </div>
   </div>

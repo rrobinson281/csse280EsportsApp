@@ -54,7 +54,11 @@ rhit.CommunityPageController = class{
 			const newPost = this._createPost(post);
 			newPost.onclick = () =>{
 				console.log("You clicked on a post");
-				if(post.UserId == rhit.loginManager.uid){}
+				if(post.UserId == rhit.loginManager.uid){
+					console.log("Clicked on!");
+					window.location.href=`/editPost.html?id=${post.id}`;
+					
+				}
 				else{window.location.href=`/profile.html?id=${post.UserId}`}
 			};
 			newList.append(newPost);
@@ -67,7 +71,7 @@ rhit.CommunityPageController = class{
 	_createPost(post){
 		return htmlmToElement(`<div class = "row list-entry mx-auto">
         <div class = "listDiv mx-auto">
-          <p><img src = "https://t4.ftcdn.net/jpg/00/64/67/63/360_F_64676383_LdbmhiNM6Ypzb3FM4PPuFP9rHe7ri8Ju.jpg">
+          <p id = "${post.id}"><img src = "https://t4.ftcdn.net/jpg/00/64/67/63/360_F_64676383_LdbmhiNM6Ypzb3FM4PPuFP9rHe7ri8Ju.jpg">
             ${post.UserId}: ${post.Text}.</p>
         </div>
       </div>`);
@@ -117,24 +121,100 @@ rhit.PostManager = class{
 		});
 	}
 }
+rhit.EditPostManager = class{
+	
+	constructor(id){
+		this._id = id;
+		this._documentSnapshot = {};
+		this._ref = firebase.firestore().collection(rhit.POSTS).doc(id);
+		
+	}
+	beginListening(){
+		this._ref.onSnapshot((doc)=>{
+			if(doc.exists){
+				this._documentSnapshot = doc;
+				document.querySelector("#postInput").value = doc.get(rhit.POST_TEXT);
+			}
+			else console.log("that dont exist");
+		});
+	}
+	update(newText){
+		console.log(newText);
+		this._ref.update({
+			[rhit.POST_TEXT]: newText
+		}).then(()=>{
+			console.log("successful Update!");
+			window.location.href = "/community.html";
+		})
+		.catch((error)=>{
+			console.error("UpdateFailed: ",error);
+		});
+	}
+	delete(){
+		this._ref.delete().then(()=>{
+			console.log("Document successfully deleted!");
+			window.location.href = "/community.html";
+		}).catch((error)=> {
+			console.error("Error removing document: ", error);
+		});
+		
+	}
+}
 rhit.ProfilePageController = class{
 	constructor(){
 		const queryString = window.location.search;
 		const urlParams = new URLSearchParams(queryString);
 		this._uid = urlParams.get("id");
-		this.profileManager = new rhit.ProfileManager(this._uid);
-		this.profileManager.beginListening(this.updateView.bind(this));
+		rhit.profileManager = new rhit.ProfileManager(this._uid);
+		rhit.profileManager.beginListening(this.updateView.bind(this));
+		$('#editProfileDialog').on('show.bs.modal', (event) => {
+			document.querySelector("#inputURL").value = rhit.profileManager.profilePhoto;
+		});
+		$('#editProfileDialog').on('shown.bs.modal', (event) => {
+			document.querySelector("#inputURL").focus();
+		});
+		document.querySelector("#submitEditURL").onclick = () =>{
+			rhit.profileManager.editProfilePhoto(document.querySelector("#inputURL").value);
+		}
 		
 	}
 	updateView(){
 		document.querySelector("#userName").innerHTML = this._uid;
-		document.querySelector("#profilePic").src = this.profileManager.profilePhoto;
+		document.querySelector("#profilePic").src = rhit.profileManager.profilePhoto;
+		if(this._uid==rhit.loginManager.uid){
+			console.log("User is same as profile user");
+			document.querySelector("#editBtn").style.display = "flex";
+		}
+		//Make da profiles and stuff
+		const newList = htmlmToElement(`<div id="accountDiv" class="justify-content-center">
+										<div>&nbsp;User Accounts:</div>
+										<div id="accountDivBody"><div class="container"><div class="row"></div></div>`);
+		document.querySelector("#profileRow").innerHTML = "";
+		console.log(rhit.profileManager.profileLength);
+		for(let i = 0; i < rhit.profileManager.profileLength;i++){
+			console.log("what");
+			const profile = rhit.profileManager.getProfileAtIndex(i);
+			const newProfile = this._profileElement(profile);
+			newProfile.onclick = () => {};
+			document.querySelector("#profileRow").append(newProfile);
+			console.log(document.querySelector("#profileRow"));
+			// newList.append(newPost);
+		}
+	}
+
+	_profileElement(profile){
+		return htmlmToElement(`<div class="col-6" id = "${profile.id}">
+                <img id="${profile.type}Icon"
+                  src=../img/${profile.type}.png
+                  alt="twitter_img">&nbsp;${profile.name}
+              </div>
+              <br><br></br>`);
 	}
 }
 rhit.ProfileManager = class{
 	constructor(uid){
 		this._documentSnapshot =[];
-		this._profileList;
+		this._profileList = [];
 		this._uid = uid
 		// this._ref = firebase.firestore().collection(rhit.PROFILE).doc(this._uid);
 		this._ref = firebase.firestore().collection(rhit.PROFILE).doc(this._uid);
@@ -153,11 +233,13 @@ rhit.ProfileManager = class{
 		this.unsubscribe = this._ref.onSnapshot((querySnapshot) => {
 			this._documentSnapshot = querySnapshot;
 			console.log(querySnapshot.get(rhit.PROFILE_PHOTO))
-			func();
+			
 		});
 		this._profileRef.onSnapshot(docs =>{
 			this._profileList = docs.docs;
-			console.log(this._profileList[0].get(rhit.PROFILE_TYPE));
+			console.log(this._profileList.length);
+			func();
+			// console.log(this._profileList[0].get(rhit.PROFILE_TYPE));
 		});
 	}
 	editProfilePhoto(url){
@@ -197,6 +279,9 @@ rhit.ProfileManager = class{
 	}
 	get profilePhoto(){
 		return this._documentSnapshot.get(rhit.PROFILE_PHOTO);
+	}
+	get profileLength(){
+		return this._profileList.length;
 	}
 	getProfileAtIndex(index){
 		return new rhit.Profile(this._profileList[index].get(rhit.PROFILE_TYPE),
@@ -278,6 +363,7 @@ rhit.initPage = function(){
 	}
 	if(document.querySelector("#homePage")){
 		console.log("You are on the HomePage");
+		document.querySelector("#userNameText").innerHTML = `Welcome, ${rhit.loginManager.uid}!`;
 		document.querySelector("#scheduleVisitBtn").onclick = () => window.location = "https://ems.rose-hulman.edu/emswebapp/";
 		document.querySelector("#recommendGameBtn").onclick = () => window.location.href = "/recommendation.html";
 	}
@@ -302,12 +388,27 @@ rhit.initPage = function(){
 			rhit.postManager.addPost(postText);
 		}
 	}
+	if(document.querySelector("#editPostPage")){
+		console.log("You are on the Edit Post Page");
+		const id = urlParams.get("id");
+		rhit.editPostManager = new this.EditPostManager(id);
+		rhit.editPostManager.beginListening();
+		document.querySelector("#editPostBtn").onclick = () => {
+			rhit.editPostManager.update(document.querySelector("#postInput").value);
+		}
+		document.querySelector("#submitDeletePost").onclick = () => {
+			rhit.editPostManager.delete();
+		}
+
+
+	}
 	
 	if(document.querySelector("#infoPage")){
 
 	}
 	if(document.querySelector("#profilePage")){
 		console.log("You are on the profilePage");
+		// rhit.profileManager = null;
 		rhit.profileController = new rhit.ProfilePageController();
 	}
 	

@@ -1,0 +1,37 @@
+body {
+    background: #DDDDDD;
+}
+
+.navbar {
+    background-color: #800000;
+    color: white;
+}
+
+.page-container {
+    margin-top: 75px;
+}
+
+.btn{
+    color: white;
+}
+
+#roseLogo{
+    max-width: 350px;
+    margin: auto;
+    display: block;
+}
+#loginBtn{
+    background-color: #800000;
+    color:white;
+    display:block;
+    margin: 60px auto;
+    padding: 10x 30px;
+    font-size: 1.1em;
+}
+#bottomNav{
+    background-color: #800000;
+    color: white;
+}
+#editBtn{
+    display: none;
+}

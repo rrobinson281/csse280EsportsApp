@@ -29,6 +29,10 @@
     border-width: 10px;
     background: rgb(151, 148, 148);
     margin: auto;
-    width: 350px;
-    height: 350px;
+    width: 380px;
+    height: 380px;
+    font-size: .9em;
+}
+#editBtn{
+    display: none;
 }
