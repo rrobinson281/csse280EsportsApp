@@ -1,0 +1,16 @@
+h1{
+    text-decoration: underline;
+    /* font-weight: bolder; */
+    font-size: 35px;
+}
+
+li{
+    font-size: 13px;
+}
+
+#communityList{
+    border-color: black;
+    border-style: solid;
+    border-width: 10px;
+    height: 81vh;
+}

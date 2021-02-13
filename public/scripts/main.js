@@ -12,6 +12,16 @@ rhit.PROFILE_PHOTO = "ProfilePhoto";
 rhit.USER_PROFILES = "UserProfiles"
 rhit.PROFILE_NAME = "ProfileName";
 rhit.PROFILE_TYPE= "ProfileType";
+
+// let calendar = new Calendar(calendarEl, {
+// 	plugins: [ googleCalendarPlugin ],
+// 	googleCalendarApiKey: 'AIzaSyDMBK7Vz-JbRyHdA5eJn1LGl-UiAukHBaU',
+// 	events: {
+// 	  googleCalendarId: 'fr7a99kuoek1b669l8uicfdo7k@group.calendar.google.com',
+// 	//   className: 'gcal-event' // an option!
+// 	}
+//   });
+
 function htmlmToElement(html){
 	var template = document.createElement('template');
 	html = html.trim();
