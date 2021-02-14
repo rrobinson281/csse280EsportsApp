@@ -36,3 +36,11 @@
 #editBtn{
     display: none;
 }
+.bmd-btn-fab{
+    background: #800008;
+    color: white;
+}
+/* datalist{ z-index:1500 !important; display:block !important; }  */
+.col-6{
+    margin-bottom: 10px;
+}

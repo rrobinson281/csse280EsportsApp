@@ -166,6 +166,7 @@ rhit.ProfilePageController = class{
 		const queryString = window.location.search;
 		const urlParams = new URLSearchParams(queryString);
 		this._uid = urlParams.get("id");
+		this.profileNum=-1;
 		rhit.profileManager = new rhit.ProfileManager(this._uid);
 		rhit.profileManager.beginListening(this.updateView.bind(this));
 		$('#editProfileDialog').on('show.bs.modal', (event) => {
@@ -176,12 +177,29 @@ rhit.ProfilePageController = class{
 		});
 		document.querySelector("#submitEditURL").onclick = () =>{
 			rhit.profileManager.editProfilePhoto(document.querySelector("#inputURL").value);
+		};
+		document.querySelector("#submitAddProfile").onclick = () => {
+			let profileType = document.querySelector("#inputType").value;
+			let profileName = document.querySelector("#inputName").value;
+			rhit.profileManager.addProfile(profileType, profileName);
 		}
-		
+		document.querySelector("#submitEditProfile").onclick = () =>{
+			let profileType = document.querySelector("#editType").value;
+			let profileName = document.querySelector("#editName").value;
+			rhit.profileManager.editProfile(this.profileID,profileType, profileName);
+		}
+		document.querySelector("#submitDeleteProfile").onclick = () =>{
+			rhit.profileManager.removeProfile(this.profileID);
+		}
 	}
 	updateView(){
 		document.querySelector("#userName").innerHTML = this._uid;
 		document.querySelector("#profilePic").src = rhit.profileManager.profilePhoto;
+		$('#editAccountDialog').on('show.bs.modal', (event) => {
+			let profile = rhit.profileManager.getProfileAtIndex(this.profileNum);
+			document.querySelector("#editType").value = profile.type;
+			document.querySelector("#editName").value = profile.name;
+		});
 		if(this._uid==rhit.loginManager.uid){
 			console.log("User is same as profile user");
 			document.querySelector("#editBtn").style.display = "flex";
@@ -196,7 +214,10 @@ rhit.ProfilePageController = class{
 			console.log("what");
 			const profile = rhit.profileManager.getProfileAtIndex(i);
 			const newProfile = this._profileElement(profile);
-			newProfile.onclick = () => {};
+			newProfile.onclick = () => {
+				this.profileNum = i;
+				this.profileID = profile.id;
+			};
 			document.querySelector("#profileRow").append(newProfile);
 			console.log(document.querySelector("#profileRow"));
 			// newList.append(newPost);
@@ -204,7 +225,7 @@ rhit.ProfilePageController = class{
 	}
 
 	_profileElement(profile){
-		return htmlmToElement(`<div class="col-6" id = "${profile.id}">
+		return htmlmToElement(`<div data-toggle="modal" data-target="#editAccountDialog" class="col-6" id = "${profile.id}">
                 <img id="${profile.type}Icon"
                   src=../img/${profile.type}.png
                   alt="twitter_img">&nbsp;${profile.name}
@@ -273,7 +294,6 @@ rhit.ProfileManager = class{
 	removeProfile(profileID){
 		this._profileRef.doc(profileID).delete().then(()=>{
 			console.log("Document successfully deleted!");
-			window.location.href = "/index.html";
 		}).catch((error)=> {
 			console.error("Error removing document: ", error);
 		});
@@ -486,8 +506,8 @@ var DISCOVERY_DOCS = ["https://www.googleapis.com/discovery/v1/apis/calendar/v3/
 // included, separated by spaces.
 var SCOPES = 'https://www.googleapis.com/auth/calendar';
 
-var authorizeButton = document.getElementById('authorize_button');
-var signoutButton = document.getElementById('signout_button');
+var authorizeButton = document.querySelector('#authorize_button');
+var signoutButton = document.querySelector('#signout_button');
 
 /**
  *  On load, called to load the auth2 library and API client library.
@@ -499,16 +519,14 @@ function handleClientLoad() {
 /**
  *  Initializes the API client library and sets up sign-in state
  *  listeners.
- */
-function handleClientLoad() {
-	gapi.load('client:auth2', initClient);
-  }
+*/
 
   /**
    *  Initializes the API client library and sets up sign-in state
    *  listeners.
    */
   function initClient() {
+	  console.log("initClient Called");
 	gapi.client.init({
 	  apiKey: API_KEY,
 	  clientId: CLIENT_ID,
@@ -523,7 +541,8 @@ function handleClientLoad() {
 	  authorizeButton.onclick = handleAuthClick;
 	  signoutButton.onclick = handleSignoutClick;
 	}, function(error) {
-	  appendPre(JSON.stringify(error, null, 2));
+		console.log('error :>> ', error);
+	//   appendPre(JSON.stringify(error, null, 2));
 	});
   }
 
@@ -548,6 +567,7 @@ function handleClientLoad() {
    *  Sign in the user upon button click.
    */
   function handleAuthClick(event) {
+	  console.log("Authorized button clicked");
 	gapi.auth2.getAuthInstance().signIn();
   }
 
@@ -564,11 +584,11 @@ function handleClientLoad() {
    *
    * @param {string} message Text to be placed in pre element.
    */
-  function appendPre(message) {
-	var pre = document.getElementById('content');
-	var textContent = document.createTextNode(message + '\n');
-	pre.appendChild(textContent);
-  }
+//   function appendPre(message) {
+// 	var pre = document.getElementById('content');
+// 	var textContent = document.createTextNode(message + '\n');
+// 	pre.appendChild(textContent);
+//   }
 
 
 

@@ -31,9 +31,13 @@
     <div id="userName">BlevinsR1</div>
     <br>
     <br>
-    <br>
+    
     <div id="accountDiv" class="justify-content-center">
-        <div>&nbsp;User Accounts:</div>
+        <div>&nbsp;User Accounts: 
+          <button type="button" id = "fab" class="btn bmd-btn-fab bmd-btn-fab-sm" data-toggle="modal" data-target="#addProfileDialog">
+            <i class="material-icons">add</i>
+          </button>
+        </div>
         <br>
         <div id="accountDivBody">
           <div class="container">
@@ -97,6 +101,7 @@
       </div>
     </div>
   </div>
+  <!-- Edit Profile Photo Modal -->
   <div class="modal fade" id="editProfileDialog" tabindex="-1" role="dialog" aria-labelledby="add Quote Dialog" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
       <div class="modal-content">
@@ -115,7 +120,89 @@
         </div>
       </div>
     </div>
+  </div>
     
+<!-- Edit Account Dialog -->
+<div class="modal fade" id="editAccountDialog" tabindex="-1" role="dialog" aria-labelledby="add Quote Dialog" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Edit this Account</h5>
+      </div>
+      <div class="modal-body">
+          <div class="form-group bmd-form-group">
+            <label for="editType">Profile Type</label>
+            <input list="editProfileTypes" name="types" id="editType">
+            <datalist id="editProfileTypes">
+              <option value="twitter">
+              <option value="steam">
+              <option value="xbox">
+              <option value="playstation">
+              <option value="discord">
+              <option value="switch">
+            </datalist>
+          </div>
+          <div class="form-group bmd-form-group">
+            <label for="editName" >Profile Name.</label>
+            <input type="text" class="form-control" id="editName" placeholder="Profile Name">
+          </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">CANCEL</button>
+        <button type="button" id = "submitEditProfile" data-dismiss="modal" class="btn btn-primary">EDit profile</button>
+        <button type="button" id = "checkDeleteProfile" data-toggle="modal" data-target="#deleteCheckDialog" data-dismiss="modal" class="btn btn-primary">DELETE</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="deleteCheckDialog" tabindex="-1" role="dialog" aria-labelledby="add Quote Dialog" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Delete this Profile</h5>
+      </div>
+      <div class="modal-body">
+          Are you sure you want to delete this profile?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">CANCEL</button>
+        <button type="button" id = "submitDeleteProfile" data-dismiss="modal" class="btn btn-primary">DELETE</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+  <!-- add account modal -->
+  <div class="modal fade" id="addProfileDialog" tabindex="-1" role="dialog" aria-labelledby="add Quote Dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Add Profile</h5>
+        </div>
+        <div class="modal-body">
+            <div class="form-group bmd-form-group">
+              <label for="inputType">Profile Type</label>
+              <input list="profileTypes" name="types" id="inputType">
+              <datalist id="profileTypes">
+                <option value="twitter">
+                <option value="steam">
+                <option value="xbox">
+                <option value="playstation">
+                <option value="discord">
+                <option value="switch">
+              </datalist>
+            </div>
+            <div class="form-group bmd-form-group">
+              <label for="inputName " >Profile Name.</label>
+              <input type="text" class="form-control" id="inputName" placeholder="Profile Name">
+            </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">CANCEL</button>
+          <button type="button" id = "submitAddProfile" data-dismiss="modal" class="btn btn-primary">CREATE</button>
+        </div>
+      </div>
+    </div>
   </div>
   <script src="scripts/jquery.min.js"></script>
   <script src="scripts/popper.js"></script>
