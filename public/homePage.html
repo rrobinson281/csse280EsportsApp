@@ -26,7 +26,6 @@
           alt="Calendar">
     </div> -->
     <br>
-    <br>
     <div class = "container" id="auth-buttons">
       <div class="row">
         <div class = "col"><button type = 'button' class = 'btn'id="authorize_button">Authorize</button>
@@ -85,13 +84,8 @@
             <span class="bmd-help">Please write a short description of the event</span>
           </div>
           <div class="form-group bmd-form-group">
-            <label for="inputStartTime" class="bmd-label-floating">Start Time</label>
-            <input type="text" class="form-control" id="inputStartTime">
-            <span class="bmd-help">Format e.g. (YYYY-MM-DD)</span>
-          </div>
-          <div class="form-group bmd-form-group">
-            <label for="inputEndTime" class="bmd-label-floating">End Time</label>
-            <input type="text" class="form-control" id="inputEndTime">
+            <label for="inputStartTime" class="bmd-label-floating">Event Date</label>
+            <input type="text" class="form-control" id="inputEventDate">
             <span class="bmd-help">Format e.g. (YYYY-MM-DD)</span>
           </div>
         
@@ -100,7 +94,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">CANCEL</button>
-        <button id="submitAddQuote" type="button" class="btn btn-primary" data-dismiss="modal">CREATE</button>
+        <button id="submitAddEvent" type="button" class="btn btn-primary" data-dismiss="modal">CREATE</button>
       </div>
     </div>
   </div>

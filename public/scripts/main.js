@@ -362,6 +362,8 @@ rhit.AuthManager = class {
 	get uid() { return this._user.uid} 
 }
 
+
+
 rhit.checkForRedirects = function(){
 	if(document.querySelector("#loginPage") && rhit.loginManager.isSignedIn){
 		window.location.href = "/homePage.html";
@@ -374,6 +376,32 @@ rhit.checkForRedirects = function(){
 rhit.ApiManager = class{
 	constructor(){
 
+	}
+	createEvent(summary,location,description,date){
+		let request = gapi.client.calendar.events.insert({
+			'calendarId': `fr7a99kuoek1b669l8uicfdo7k@group.calendar.google.com`,
+			'resource': this.createEventJson(summary,location,description,date)
+		  });
+		  request.execute((event) => {
+			rhit.calendar.refetchEvents()
+			console.log('Event created: ' + event.htmlLink);
+		  });
+		  
+	}
+	createEventJson(summary,location,description,date){
+		return {
+			'summary': `${summary}`,
+			'location': `${location}`,
+			'description': `${description}`,
+			'start': {
+				'date': `${date}`,
+				'timeZone': 'America/Los_Angeles'
+			  },
+			  'end': {
+				'date': `${date}`,
+				'timeZone': 'America/Los_Angeles'
+			  },
+		  }
 	}
 }
 rhit.initPage = function(){
@@ -390,6 +418,7 @@ rhit.initPage = function(){
 	}
 	if(document.querySelector("#homePage")){
 		console.log("You are on the HomePage");
+		rhit.apiManager = new rhit.ApiManager();
 		document.querySelector("#userNameText").innerHTML = `Welcome, ${rhit.loginManager.uid}!`;
 		document.querySelector("#scheduleVisitBtn").onclick = () => window.location = "https://ems.rose-hulman.edu/emswebapp/";
 		document.querySelector("#recommendGameBtn").onclick = () => window.location.href = "/recommendation.html";
@@ -402,24 +431,23 @@ rhit.initPage = function(){
 		  });
 		console.log("rendering Calendar");
 		rhit.calendar.render();
-		document.querySelector("#addEventDialog").addEventListener("click", (event) => {
+		document.querySelector("#submitAddEvent").onclick = () => {
 			const title = document.querySelector("#inputTitle").value;
 			const location = document.querySelector("#inputLocation").value;
 			const description = document.querySelector("#inputDescription").value;
-			const start = document.querySelector("#inputStartTime").value;
-			const end = document.querySelector("#inputEndTime").value;
-			console.log(title, location, description, start, end);
+			const date = document.querySelector("#inputEventDate").value;
+			console.log(title, location, description, date);
+			rhit.apiManager.createEvent(title, location, description, date);
 			// rhit.fbMovieQuotesManager.add(quote, movie);
 
-		});
+		};
 
 		$('#addEventDialog').on('show.bs.modal', (event) =>{
 			//pre animation
-			const title = document.querySelector("#inputTitle").value = "";
-			const location = document.querySelector("#inputLocation").value = "";
-			const description = document.querySelector("#inputDescription").value = "";
-			const start = document.querySelector("#inputStartTime").value = "";
-			const end = document.querySelector("#inputEndTime").value = "";
+			document.querySelector("#inputTitle").value = "";
+			document.querySelector("#inputLocation").value = "";
+			document.querySelector("#inputDescription").value = "";
+			document.querySelector("#inputEventDate").value.value = "";
 		});
 		$('#addEventDialog').on('shown.bs.modal', (event) =>{
 			//post animation
