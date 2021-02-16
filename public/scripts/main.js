@@ -75,7 +75,6 @@ function handleClientLoad() {
 	  rhit.calendarSignedIn = true;
 	  authorizeButton.style.display = 'none';
 	  signoutButton.style.display = 'block';
-	  listUpcomingEvents();
 	} else {
 		rhit.calendarSignedIn = false;
 	  authorizeButton.style.display = 'block';
@@ -263,6 +262,7 @@ rhit.ProfilePageController = class{
 		});
 		document.querySelector("#submitEditURL").onclick = () =>{
 			rhit.profileManager.editProfilePhoto(document.querySelector("#inputURL").value);
+			this.updateView();
 		};
 		document.querySelector("#submitAddProfile").onclick = () => {
 			let profileType = document.querySelector("#inputType").value;
@@ -289,6 +289,7 @@ rhit.ProfilePageController = class{
 		if(this._uid==rhit.loginManager.uid){
 			console.log("User is same as profile user");
 			document.querySelector("#editBtn").style.display = "flex";
+			document.querySelector("#addProfileBtn").style.display = "inline-block";
 		}
 		//Make da profiles and stuff
 		const newList = htmlmToElement(`<div id="accountDiv" class="justify-content-center">
@@ -300,10 +301,14 @@ rhit.ProfilePageController = class{
 			console.log("what");
 			const profile = rhit.profileManager.getProfileAtIndex(i);
 			const newProfile = this._profileElement(profile);
-			newProfile.onclick = () => {
-				this.profileNum = i;
-				this.profileID = profile.id;
-			};
+			if(this._uid == rhit.loginManager.uid){
+				newProfile.onclick = () => {
+					this.profileNum = i;
+					this.profileID = profile.id;
+					newProfile.dataset.toggle="modal"
+					newProfile.dataset.target="#editAccountDialog"
+				};
+			}
 			document.querySelector("#profileRow").append(newProfile);
 			console.log(document.querySelector("#profileRow"));
 			// newList.append(newPost);
@@ -311,7 +316,7 @@ rhit.ProfilePageController = class{
 	}
 
 	_profileElement(profile){
-		return htmlmToElement(`<div data-toggle="modal" data-target="#editAccountDialog" class="col-6" id = "${profile.id}">
+		return htmlmToElement(`<div class="col-6" id = "${profile.id}">
                 <img id="${profile.type}Icon"
                   src=../img/${profile.type}.png
                   alt="twitter_img">&nbsp;${profile.name}
@@ -331,11 +336,13 @@ rhit.ProfileManager = class{
 			if(!doc.exists){
 				firebase.firestore().collection(rhit.PROFILE).doc(this._uid).set({
 					[rhit.PROFILE_PHOTO]: "https://t4.ftcdn.net/jpg/00/64/67/63/360_F_64676383_LdbmhiNM6Ypzb3FM4PPuFP9rHe7ri8Ju.jpg",
-					[rhit.USER_PROFILES]: {}
 				})
-
 			}
 		});
+		// this._profileRef.get().then((doc) => {
+		// 	this._profileRef.set({
+		// 	})
+		// })
 	}
 	beginListening(func){
 		this.unsubscribe = this._ref.onSnapshot((querySnapshot) => {

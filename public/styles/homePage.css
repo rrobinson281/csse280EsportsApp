@@ -21,6 +21,7 @@ body {
 
 #calendar{
     text-align: center;
+    
 }
 
 #scheduleVisitBtn, #recommendGameBtn, .btn{
@@ -42,3 +43,8 @@ body {
     color: white;
 }
 
+@media (min-width: 650px) {
+    #calendar{
+        width: 70%;
+    }
+}

@@ -33,7 +33,7 @@
     height: 380px;
     font-size: .9em;
 }
-#editBtn{
+#editBtn, #addProfileBtn{
     display: none;
 }
 .bmd-btn-fab{

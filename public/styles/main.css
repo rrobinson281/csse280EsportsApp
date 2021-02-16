@@ -5,6 +5,7 @@ body {
 .navbar {
     background-color: #800000;
     color: white;
+    z-index: 10000000;
 }
 
 .page-container {
@@ -31,4 +32,8 @@ body {
 #bottomNav{
     background-color: #800000;
     color: white;
+    height: 50px;
+}
+#btn-container{
+    margin-bottom: 10px;
 }
