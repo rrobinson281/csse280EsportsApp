@@ -23,14 +23,17 @@
     text-align: center;
 }
 
-#accountDiv{
+#accountDiv {
     border-color: black;
     border-style: solid;
     border-width: 10px;
     background: rgb(151, 148, 148);
     margin: auto;
     width: 380px;
-    height: 380px;
+    height: 350px;
+    
+}
+#accountDiv .col-6{
     font-size: .9em;
 }
 #editBtn, #addProfileBtn{
@@ -40,7 +43,15 @@
     background: #800008;
     color: white;
 }
-/* datalist{ z-index:1500 !important; display:block !important; }  */
 .col-6{
-    margin-bottom: 10px;
+    margin-bottom: 08px;
+}
+#addProfileBtn{}
+#accountBtnDiv{
+    margin-top: 5px;
+}
+#editBtn{
+    position: absolute;
+    left: 490px;
+    top: 148px;
 }
