@@ -348,6 +348,7 @@ rhit.ProfileManager = class{
 		this.unsubscribe = this._ref.onSnapshot((querySnapshot) => {
 			this._documentSnapshot = querySnapshot;
 			console.log(querySnapshot.get(rhit.PROFILE_PHOTO))
+			func();
 			
 		});
 		this._profileRef.onSnapshot(docs =>{
