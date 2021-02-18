@@ -12,6 +12,12 @@ rhit.PROFILE_PHOTO = "ProfilePhoto";
 rhit.USER_PROFILES = "UserProfiles"
 rhit.PROFILE_NAME = "ProfileName";
 rhit.PROFILE_TYPE= "ProfileType";
+rhit.EVENT_REQUESTS ="EventRequests";
+rhit.EVENT_TITLE = "EventTitle";
+rhit.DESCRIPTION = "Description";
+rhit.LOCATION = "Location";
+rhit.DATE = "Date";
+rhit.ADMINS = "Admins";
 rhit.CALENDAR_ID = 'fr7a99kuoek1b669l8uicfdo7k@group.calendar.google.com';
 
 //Code Recieved From 
@@ -108,6 +114,15 @@ rhit.RecommendationManager = class{
 	constructor(uid){
 		this.uid = uid;
 		this._ref = firebase.firestore().collection(rhit.RECOMMENDATION);
+		this._docs;
+	}
+	beginListening(func){
+		let query = this._ref.limit(50);
+		this.unsubscribe = query.onSnapshot((querySnapshot) => {
+			this._docs = querySnapshot.docs;
+			console.log(querySnapshot.docs.length);
+			func();
+		});
 	}
 	sendRecommendation(gameName, recommendationText){
 		console.log('gameName :>> ', gameName);
@@ -148,6 +163,7 @@ rhit.CommunityPageController = class{
 				else{window.location.href=`/profile.html?id=${post.UserId}`}
 			};
 			newList.append(newPost);
+			
 		}
 		const oldList = document.querySelector("#communityList");
 		oldList.removeAttribute("id");
@@ -157,7 +173,7 @@ rhit.CommunityPageController = class{
 	_createPost(post){
 		return htmlmToElement(`<div class = "row list-entry mx-auto">
         <div class = "listDiv mx-auto">
-          <p id = "${post.id}"><img src = "https://t4.ftcdn.net/jpg/00/64/67/63/360_F_64676383_LdbmhiNM6Ypzb3FM4PPuFP9rHe7ri8Ju.jpg">
+          <p id = "${post.id}">
             ${post.UserId}: ${post.Text}.</p>
         </div>
       </div>`);
@@ -167,6 +183,7 @@ rhit.CommunityManager = class{
 	constructor(){
 		this._documentSnapshots = [];
 		this._ref = firebase.firestore().collection(rhit.POSTS);
+		this.profileManager
 	}
 	beginListening(func){
 		// let query = this._ref.orderBy(rhit.LAST_TOUCHED,"desc").limit(50);
@@ -277,6 +294,8 @@ rhit.ProfilePageController = class{
 		document.querySelector("#submitDeleteProfile").onclick = () =>{
 			rhit.profileManager.removeProfile(this.profileID);
 		}
+		document.querySelector("#GameRecommendations").onclick = () => window.location.href = '/recommendationsPage.html';
+		document.querySelector("#RequestedEvents").onclick = () => window.location.href = '/requestedEvents.html';
 	}
 	updateView(){
 		document.querySelector("#userName").innerHTML = this._uid;
@@ -290,6 +309,10 @@ rhit.ProfilePageController = class{
 			console.log("User is same as profile user");
 			document.querySelector("#editBtn").style.display = "flex";
 			document.querySelector("#addProfileBtn").style.display = "inline-block";
+			if(rhit.IsAdmin){
+				console.log("User is Admin");
+				document.querySelector("#AdminBtns").style.display = "inline-block";
+			}
 		}
 		//Make da profiles and stuff
 		const newList = htmlmToElement(`<div id="accountDiv" class="justify-content-center">
@@ -336,6 +359,7 @@ rhit.ProfileManager = class{
 			if(!doc.exists){
 				firebase.firestore().collection(rhit.PROFILE).doc(this._uid).set({
 					[rhit.PROFILE_PHOTO]: "https://t4.ftcdn.net/jpg/00/64/67/63/360_F_64676383_LdbmhiNM6Ypzb3FM4PPuFP9rHe7ri8Ju.jpg",
+					[rhit.IS_ADMIN]: false
 				})
 			}
 		});
@@ -398,6 +422,7 @@ rhit.ProfileManager = class{
 	get profileLength(){
 		return this._profileList.length;
 	}
+	get isAdmin(){return this._documentSnapshot.get(rhit.IS_ADMIN)}
 	getProfileAtIndex(index){
 		return new rhit.Profile(this._profileList[index].get(rhit.PROFILE_TYPE),
 								this._profileList[index].get(rhit.PROFILE_NAME),
@@ -455,8 +480,137 @@ rhit.AuthManager = class {
 	get isSignedIn() {return !!this._user;}
 	get uid() { return this._user.uid} 
 }
+rhit.RecommendationPageController = class{
+	constructor(){
+		console.log("here");
+		this.recommendationPageManager = new rhit.RecommendationPageManager();
+		this.recommendationPageManager.beginListening(this.updateView.bind(this));
+	}
+	updateView(){
+		const newList = htmlmToElement('<div id="recommendationList" class = "container justify-content-center"></div>');
+		for(let i = 0; i < this.recommendationPageManager.length;i++){
+			const recommendation = this.recommendationPageManager.getRecommendation(i);
+			const newRecommendation = this._createRecommendation(recommendation);
+			console.log('newEvent :>> ', newRecommendation);
+			newList.append(newRecommendation);
+		}
+		const oldList = document.querySelector("#recommendationList");
+		oldList.removeAttribute("id");
+		oldList.hidden = true;
+		console.log(newList);
+		oldList.parentElement.append(newList);
+	}
+	_createRecommendation(recommendation){
+		return htmlmToElement(`<div class = "row list-entry mx-auto">
+        <div class = "listDiv mx-auto">
+			<div>Game requested by: ${recommendation.get(rhit.USER_ID)}</div>
+			<div>Game: ${recommendation.get(rhit.RECOMMENDATION_GAME)}</div>
+			<div>Recommendation Text: ${recommendation.get(rhit.RECOMMENDATION_TEXT)}</div>
+        </div>
+      </div>`);
+	}
+}
+rhit.RecommendationPageManager = class{
+	constructor(){
+		this._ref = firebase.firestore().collection(rhit.RECOMMENDATION);
+		this._docs = [];
+	}
+	beginListening(func){
+		let query = this._ref.limit(50);
+		this.unsubscribe = query.onSnapshot((querySnapshot) => {
+			this._docs = querySnapshot.docs;
+			console.log(querySnapshot.docs.length);
+			func();
+		});
+	}
+	
+	getRecommendation(index){
+		return this._docs[index];
+	}
+	get length(){
+		return this._docs.length;
+	}
+}
+rhit.EventPageController = class{
+	constructor(){
+		rhit.eventManager.beginListening(this.updateView.bind(this));
+	}
+	updateView(){
+		const newList = htmlmToElement('<div id="eventsList" class = "container justify-content-center"></div>');
+		for(let i = 0; i < rhit.eventManager.length;i++){
+			const event = rhit.eventManager.getRequestAtIndex(i);
+			const newEvent = this._createEvent(event);
+			console.log('newEvent :>> ', newEvent);
+			newList.append(newEvent);
+		}
+		const oldList = document.querySelector("#eventsList");
+		oldList.removeAttribute("id");
+		oldList.hidden = true;
+		console.log(newList);
+		oldList.parentElement.append(newList);
+	}
+	_createEvent(event){
+		return htmlmToElement(`<div class = "row list-entry mx-auto">
+        <div class = "listDiv mx-auto">
+			<div>Event Requested by: ${event.user}</div>
+			<div>Event Title: ${event.title}</div>
+			<div>Event Description: ${event.desc}</div>
+			<div>Event Location: ${event.location}</div>
+			<div>Event Date: ${event.date}</div>
+        </div>
+      </div>`);
+	}
+}
 
+rhit.EventManager = class{
+	constructor(){
+		this._ref = firebase.firestore().collection("EventRequests");
+		// this._docs = [];
+	}
+	beginListening(func){
+		console.log("HELLO!");
+		let query = this._ref.limit(50);
+		this.unsubscribe = query.onSnapshot((querySnapshot) => {
+			this._docs = querySnapshot.docs;
+			console.log(querySnapshot.docs.length);
+			func();
+		});
+	}
+	addRequest(title, desc, location, date){
+		this._profileRef.add({
+			[rhit.EVENT_TITLE]: title,
+			[rhit.DESCRIPTION]: desc,
+			[rhit.LOCATION]: location,
+			[rhit.DATE]: date,
+			[rhit.USER_ID]: rhit.loginManager.uid,
+		}).then(function(docRef){
+			console.log("Document written with ID: ",docRef.id);
+		})
+		.catch(function(error){
+			console.error("Error adding document: ",error);
+		});
+	}
 
+	getRequestAtIndex(index){
+		let event = this._docs[index];
+		return new rhit.Event(event.get(rhit.EVENT_TITLE),
+							  event.get(rhit.DESCRIPTION),
+							  event.get(rhit.LOCATION),
+							  event.get(rhit.DATE),
+							  event.get(rhit.USER_ID));
+	}
+	get length(){return this._docs.length}
+}
+
+rhit.Event = class{
+	constructor(title, desc, location, date, user){
+		this.title = title;
+		this.desc = desc;
+		this.location = location;
+		this.date = date;
+		this.user = user;
+	}
+}
 
 rhit.checkForRedirects = function(){
 	if(document.querySelector("#loginPage") && rhit.loginManager.isSignedIn){
@@ -498,23 +652,28 @@ rhit.ApiManager = class{
 		  }
 	}
 }
-rhit.initPage = function(){
+rhit.initPage = async function(){
 	const urlParams = new URLSearchParams(window.location.search);
+	rhit.eventManager = new this.EventManager();
 	if(document.querySelector("#bottomNav")){
 		document.querySelector("#homeBtn").onclick = () => window.location.href="/homePage.html";
 		document.querySelector("#communityBtn").onclick = () => window.location.href="/community.html";
 		document.querySelector("#infoBtn").onclick = () => window.location.href="/info.html";
 		document.querySelector("#profileBtn").onclick = () => window.location.href=`/profile.html?id=${rhit.loginManager.uid}`;
+	
 	}
-	if(document.querySelector("#loginPage")){
-		console.log("You are on login page.");
-		new rhit.LoginPageController();
-	}
+	await firebase.firestore().collection(rhit.ADMINS).doc(rhit.loginManager.uid)
+		.get().then((doc)=>{
+			rhit.IsAdmin = doc.exists ? true : false
+		});
 	if(document.querySelector("#homePage")){
+		
 		console.log("You are on the HomePage");
+		rhit.recommendationManager = new rhit.RecommendationManager(rhit.loginManager.uid);
 		rhit.apiManager = new rhit.ApiManager();
 		authorizeButton.onclick = handleAuthClick;
-	  signoutButton.onclick = handleSignoutClick;
+	  	signoutButton.onclick = handleSignoutClick;
+		console.log('rhit.IsAdmin :>> ', rhit.IsAdmin);
 		document.querySelector("#userNameText").innerHTML = `Welcome, ${rhit.loginManager.uid}!`;
 		document.querySelector("#scheduleVisitBtn").onclick = () => window.location = "https://ems.rose-hulman.edu/emswebapp/";
 		document.querySelector("#recommendGameBtn").onclick = () => window.location.href = "/recommendation.html";
@@ -534,16 +693,13 @@ rhit.initPage = function(){
 			const date = document.querySelector("#inputEventDate").value;
 			console.log(title, location, description, date);
 			rhit.apiManager.createEvent(title, location, description, date);
-			// rhit.fbMovieQuotesManager.add(quote, movie);
-
 		};
 
 		$('#addEventDialog').on('show.bs.modal', (event) =>{
-			//pre animation
 			document.querySelector("#inputTitle").value = "";
 			document.querySelector("#inputLocation").value = "";
 			document.querySelector("#inputDescription").value = "";
-			document.querySelector("#inputEventDate").value.value = "";
+			document.querySelector("#inputEventDate").value = "";
 		});
 		$('#addEventDialog').on('shown.bs.modal', (event) =>{
 			//post animation
@@ -553,7 +709,7 @@ rhit.initPage = function(){
 	}
 	if(document.querySelector("#recommendationPage")){
 		console.log("You are on the recommendationPage");
-		rhit.recommendationManager = new this.RecommendationManager(rhit.loginManager.uid);
+		// rhit.recommendationManager = new rhit.RecommendationManager(rhit.loginManager.uid);
 		document.querySelector("#recBtn").onclick = () => {
 			let gameName = document.querySelector("#recommendGame").value;
 			let recText = document.querySelector("#recInput").value;
@@ -583,10 +739,7 @@ rhit.initPage = function(){
 		document.querySelector("#submitDeletePost").onclick = () => {
 			rhit.editPostManager.delete();
 		}
-
-
 	}
-	
 	if(document.querySelector("#infoPage")){
 
 	}
@@ -594,6 +747,14 @@ rhit.initPage = function(){
 		console.log("You are on the profilePage");
 		// rhit.profileManager = null;
 		rhit.profileController = new rhit.ProfilePageController();
+	}
+	if(document.querySelector("#recomendationsPage")){
+		console.log("You are on the recomendationsPage");
+		new rhit.RecommendationPageController();
+	}
+	if(document.querySelector("#requestedEvents")){
+		console.log("You are on the requestedEvents");
+		new rhit.EventPageController();
 	}
 	
 }
@@ -605,6 +766,10 @@ rhit.main = function () {
 	rhit.loginManager = new rhit.AuthManager();
 	rhit.loginManager.beginListening(() => {
 		console.log("auth change callback fired. TODO check for redirects and init the page");
+		if(document.querySelector("#loginPage")){
+			console.log("You are on login page.");
+			new rhit.LoginPageController();
+		}
 		rhit.checkForRedirects();
 		rhit.initPage();
 	});

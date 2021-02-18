@@ -46,12 +46,15 @@
 .col-6{
     margin-bottom: 08px;
 }
-#addProfileBtn{}
+.AdminBtns{
+    margin-top: 10px;
+    margin-bottom: 50px;
+    display: none;
+}
+.AdminBtns .btn{
+    background: #800008;
+    color: white;
+}
 #accountBtnDiv{
     margin-top: 5px;
-}
-#editBtn{
-    position: absolute;
-    left: 490px;
-    top: 148px;
 }

@@ -20,15 +20,19 @@
       <img id="profilePic"
           src="https://i.ytimg.com/vi/yUtIX_C7g68/maxresdefault.jpg"
           alt="profile_img">
-          <div class="dropdown pull-xs-right" id = "editBtn">
-            <button class="btn bmd-btn-icon dropdown-toggle" type="button" id="lr1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              <i class="material-icons">more_vert</i>
-            </button>
-            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="lr1">
-              <button class="dropdown-item" type="button" data-toggle="modal" data-target="#editProfileDialog" id="menuEdit"><i class="material-icons">edit</i>&nbsp;&nbsp;&nbsp;Edit Profile Photo</button>
-          </div>
     </div>
-    <div id="userName">BlevinsR1</div>
+    <div class = container>
+      <div class = "row justify-content-center">
+        <div id="userName">BlevinsR1</div>
+        <div class="dropdown pull-xs-right" id = "editBtn">
+          <button class="btn bmd-btn-icon dropdown-toggle" type="button" id="lr1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <i class="material-icons">more_vert</i>
+          </button>
+          <div class="dropdown-menu dropdown-menu-right" aria-labelledby="lr1">
+            <button class="dropdown-item" type="button" data-toggle="modal" data-target="#editProfileDialog" id="menuEdit"><i class="material-icons">edit</i>&nbsp;&nbsp;&nbsp;Edit Profile Photo</button>
+        </div>
+      </div>
+    </div>
     <br>
     <br>
     
@@ -80,7 +84,12 @@
           </div>
         </div>
     </div>
-
+    <div id = AdminBtns class = "container fixed-bottom justify-content-space-evenly AdminBtns">
+      <div class="row">
+        <button id="GameRecommendations" type= "button" class= "btn mx-auto" >View Recommend Games</button>
+        <button id="RequestedEvents" type= "button" class= "btn mx-auto" >View Requested Events</button>
+      </div>
+    </div>
 
     
   </div>

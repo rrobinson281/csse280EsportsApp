@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons">
+  <link rel="stylesheet" href="styles/bootstrap-material-design.min.css">
+  <link rel="stylesheet" href="styles/main.css">
+  <link rel="stylesheet" href="styles/community.css">
+  <title>Esports Center App</title>
+</head>
+
+<body>
+  <nav class="navbar navbar-dark fixed-top">
+    <a class="navbar-brand" href="/homePage.html">Community Page</a>
+  </nav>
+  <div id="requestedEvents" class="container page-container">
+    <h3>User requested events: </h3>
+    <div id="eventsList" class = "container justify-content-center">
+      <div class = "row list-entry mx-auto">
+        <div class = "listDiv mx-auto">
+          <p><img src = "https://t4.ftcdn.net/jpg/00/64/67/63/360_F_64676383_LdbmhiNM6Ypzb3FM4PPuFP9rHe7ri8Ju.jpg">
+            User: imagine text is here Lorem ipsum dolor sit amet consectetur adipisicing elit. Assumenda, fuga? Ipsam ad incidunt, illum, rem facere, ullam deleniti sequi porro iusto a dignissimos cupiditate in voluptatum consequatur quidem nesciunt est.</p>
+        </div>
+      </div>
+    </div>    
+    
+  </div>
+
+  <div class = "container fixed-bottom" id = "bottomNav">
+    <div class = "row justify-content-center">
+      <div class ="col">
+        <button type = "button" class = "btn btn-block" id="homeBtn"><i class="material-icons">home</i></button>
+      </div>
+      <div class ="col">
+        <button type = "button" class = "btn btn-block" id="communityBtn"><i class="material-icons">article</i></button>
+      </div>
+      <div class ="col">
+        <button type = "button" class = "btn btn-block" id="infoBtn"><i class="material-icons">info</i></button>
+      </div>
+      <div class ="col">
+        <button type = "button" class = "btn btn-block" id="profileBtn"><i class="material-icons">account_circle</i></button>
+      </div>
+    </div>
+  </div>
+  <script src="scripts/jquery.min.js"></script>
+  <script src="scripts/popper.js"></script>
+  <script src="scripts/bootstrap-material-design.js"></script>
+  <script>$("body").bootstrapMaterialDesign();</script>
+  <script src="/__/firebase/7.18.0/firebase-app.js"></script>
+  <script src="/__/firebase/7.18.0/firebase-analytics.js"></script>
+  <script src="/__/firebase/7.18.0/firebase-auth.js"></script>
+  <script src="/__/firebase/7.18.0/firebase-firestore.js"></script>
+  <script src="scripts/rosefire.min.js"></script>
+  <script src="/__/firebase/init.js"></script>
+
+
+  <!-- <script src=" /__/firebase/init.js?useEmulator=true"></script> -->
+  <script src="scripts/main.js"></script>
+</body>
+
+</html>
