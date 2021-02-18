@@ -503,9 +503,9 @@ rhit.RecommendationPageController = class{
 	_createRecommendation(recommendation){
 		return htmlmToElement(`<div class = "row list-entry mx-auto">
         <div class = "listDiv mx-auto">
-			<div>Game requested by: ${recommendation.get(rhit.USER_ID)}</div>
-			<div>Game: ${recommendation.get(rhit.RECOMMENDATION_GAME)}</div>
-			<div>Recommendation Text: ${recommendation.get(rhit.RECOMMENDATION_TEXT)}</div>
+			<div><span>Game requested by:</span> ${recommendation.get(rhit.USER_ID)}</div>
+			<div><span>Game:</span> ${recommendation.get(rhit.RECOMMENDATION_GAME)}</div>
+			<div><span>Recommendation Text:</span> ${recommendation.get(rhit.RECOMMENDATION_TEXT)}</div>
         </div>
       </div>`);
 	}
@@ -547,16 +547,16 @@ rhit.EventPageController = class{
 		oldList.removeAttribute("id");
 		oldList.hidden = true;
 		console.log(newList);
-		oldList.parentElement.append(newList);
+		oldList.parentElement.append(newList);		
 	}
 	_createEvent(event){
-		return htmlmToElement(`<div class = "row list-entry mx-auto">
+		return htmlmToElement(`<div id="eventEntry" class = "row list-entry mx-auto">
         <div class = "listDiv mx-auto">
-			<div>Event Requested by: ${event.user}</div>
-			<div>Event Title: ${event.title}</div>
-			<div>Event Description: ${event.desc}</div>
-			<div>Event Location: ${event.location}</div>
-			<div>Event Date: ${event.date}</div>
+			<div><span>Event Requested by:</span> ${event.user}</div>
+			<div><span>Event Title:</span> ${event.title}</div>
+			<div><span>Event Description:</span> ${event.desc}</div>
+			<div><span>Event Location:</span> ${event.location}</div>
+			<div><span>Event Date:</span> ${event.date}</div>
         </div>
       </div>`);
 	}
@@ -569,7 +569,7 @@ rhit.EventManager = class{
 	}
 	beginListening(func){
 		console.log("HELLO!");
-		let query = this._ref.limit(50);
+		let query = this._ref.orderBy(rhit.DATE).limit(50);
 		this.unsubscribe = query.onSnapshot((querySnapshot) => {
 			this._docs = querySnapshot.docs;
 			console.log(querySnapshot.docs.length);
@@ -577,7 +577,8 @@ rhit.EventManager = class{
 		});
 	}
 	addRequest(title, desc, location, date){
-		this._profileRef.add({
+		console.log("Adding Request Log");
+		this._ref.add({
 			[rhit.EVENT_TITLE]: title,
 			[rhit.DESCRIPTION]: desc,
 			[rhit.LOCATION]: location,
@@ -623,7 +624,9 @@ rhit.checkForRedirects = function(){
 
 rhit.ApiManager = class{
 	constructor(){
-
+		if(!rhit.IsAdmin){
+			document.querySelector("#addevent_button").innerHTML = "Request Event";
+		}
 	}
 	createEvent(summary,location,description,date){
 		let request = gapi.client.calendar.events.insert({
@@ -667,7 +670,6 @@ rhit.initPage = async function(){
 			rhit.IsAdmin = doc.exists ? true : false
 		});
 	if(document.querySelector("#homePage")){
-		
 		console.log("You are on the HomePage");
 		rhit.recommendationManager = new rhit.RecommendationManager(rhit.loginManager.uid);
 		rhit.apiManager = new rhit.ApiManager();
@@ -692,7 +694,14 @@ rhit.initPage = async function(){
 			const description = document.querySelector("#inputDescription").value;
 			const date = document.querySelector("#inputEventDate").value;
 			console.log(title, location, description, date);
-			rhit.apiManager.createEvent(title, location, description, date);
+			if(rhit.isAdmin){
+				rhit.apiManager.createEvent(title, location, description, date);
+			}
+			else{
+				console.log("HHHHHHHHHHHHHHHHHH");
+				rhit.eventManager.addRequest(title, location, description, date);
+			}
+			
 		};
 
 		$('#addEventDialog').on('show.bs.modal', (event) =>{

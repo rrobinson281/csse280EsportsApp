@@ -1,0 +1,22 @@
+/* #eventEntry{
+    background-color: chartreuse;
+} */
+#eventsList, #recommendationList{
+    background-color: black;
+    border-color: black;
+    border-style: solid;
+    border-width: 10px;
+    padding: 0px;
+}
+
+span{
+    text-decoration: underline;
+    font-weight: bold;
+}
+/* .list-entry{
+    color: blue;
+} */
+
+/* div{
+    background-color: blue;
+} */
