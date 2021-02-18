@@ -776,11 +776,3 @@ rhit.main = function () {
 };
 
 rhit.main();
-
-
-
-
-
-
-
-
