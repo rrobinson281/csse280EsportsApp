@@ -157,7 +157,7 @@ rhit.CommunityPageController = class{
 				console.log("You clicked on a post");
 				if(post.UserId == rhit.loginManager.uid){
 					console.log("Clicked on!");
-					window.location.href=`/editPost.html?id=${post.id}`;
+					window.location.href=`/editpost.html?id=${post.id}`;
 					
 				}
 				else{window.location.href=`/profile.html?id=${post.UserId}`}
@@ -671,6 +671,7 @@ rhit.initPage = async function(){
 		});
 	if(document.querySelector("#homePage")){
 		console.log("You are on the HomePage");
+		document.querySelector("#signout").onclick = () => rhit.loginManager.signOut();
 		rhit.recommendationManager = new rhit.RecommendationManager(rhit.loginManager.uid);
 		rhit.apiManager = new rhit.ApiManager();
 		authorizeButton.onclick = handleAuthClick;
@@ -694,7 +695,8 @@ rhit.initPage = async function(){
 			const description = document.querySelector("#inputDescription").value;
 			const date = document.querySelector("#inputEventDate").value;
 			console.log(title, location, description, date);
-			if(rhit.isAdmin){
+			if(rhit.IsAdmin == true){
+				console.log("HELLO");
 				rhit.apiManager.createEvent(title, location, description, date);
 			}
 			else{
@@ -718,7 +720,7 @@ rhit.initPage = async function(){
 	}
 	if(document.querySelector("#recommendationPage")){
 		console.log("You are on the recommendationPage");
-		// rhit.recommendationManager = new rhit.RecommendationManager(rhit.loginManager.uid);
+		rhit.recommendationManager = new rhit.RecommendationManager(rhit.loginManager.uid);
 		document.querySelector("#recBtn").onclick = () => {
 			let gameName = document.querySelector("#recommendGame").value;
 			let recText = document.querySelector("#recInput").value;
@@ -726,6 +728,7 @@ rhit.initPage = async function(){
 		};
 	}
 	if(document.querySelector("#communityPage")){
+		document.querySelector("#signout").onclick = () => rhit.loginManager.signOut();
 		console.log("You are on the communityPage");
 		new rhit.CommunityPageController();
 	}
@@ -750,9 +753,10 @@ rhit.initPage = async function(){
 		}
 	}
 	if(document.querySelector("#infoPage")){
-
+		document.querySelector("#signout").onclick = () => rhit.loginManager.signOut();
 	}
 	if(document.querySelector("#profilePage")){
+		document.querySelector("#signout").onclick = () => rhit.loginManager.signOut();
 		console.log("You are on the profilePage");
 		// rhit.profileManager = null;
 		rhit.profileController = new rhit.ProfilePageController();
